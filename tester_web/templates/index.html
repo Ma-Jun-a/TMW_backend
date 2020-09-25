@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Ctjsoft_tester</title>
+</head>
+  <link rel="stylesheet" href="../statics/style1.css">
+  <script type="application/javascript" src="../statics/myjs.js"></script>
+  <script type="application/javascript" src="../statics/vue.js"></script>
+
+<body>
+<h2> welcome ！</h2>
+<div class="div1">
+    <h3> 请输入测试数据 </h3>
+    <form method="post"  enctype="multipart/form-data">
+
+            <textarea id="yaml" name="yaml" class="form-control" rows="30"></textarea>
+
+
+        <input type="submit" value="提交数据">
+    </form>
+
+</div>
+<div class="div2">
+    <h3> 测试结果 </h3>
+    <p> {{ data }}</p>
+    <h3> 关键测试数据： </h3>
+    <p> {{ message }}</p>
+    <h1>{{ error }}</h1>
+
+</div>
+
+
+
+</body>
+</html>

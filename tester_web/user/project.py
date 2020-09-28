@@ -3,17 +3,32 @@ from flask import Blueprint, request, make_response, jsonify
 from tester_web.tables import db_session
 from tester_web.tables.user import User, Project, ProjectUser
 
+
 project = Blueprint('project', __name__,url_prefix='/project')
 
 @project.route('/list',methods=['get'])
-def script_list(*args,**kwargs):
-    project_name = request.values.get("project")
-    projects = db_session.query(Project).filter_by(project=project_name).one()
+# @cross_origin()
+def project_list(*args,**kwargs):
+    # project_name = request.values.get("project")
+    try:
+        datas = []
+        projects = db_session.query(Project).all()
+        for project in projects:
+            data = {
+                # "id":project.id,
+                "project":project.project,
+                # "module_sub":project.module_sub,
+                "version":project.version
+            }
+            datas.append(data)
+        return make_response(jsonify({"code":200,"msg":datas}))
+    except Exception as e:
+        return  make_response(jsonify({"code": 404,"error_msg": e}))
+    # status = request.values.get("status")
 
-    status = request.values.get("status")
     # 1. 传入项目id后能够看到所有的脚本，添加所属人参数等过滤条件
     # 每个用户只能看到自己有权限的脚本
-    pass
+
     # ed_user = User(name='ed', fullname='Ed Jones', nickname='edsnickname')
     # # users.insert().values(name='jack', fullname='Jack Jones')
     # result = db_session.query(User).filter_by(username="majun").first()
@@ -32,7 +47,6 @@ def script_list(*args,**kwargs):
     # query = session.query(User.id).filter(User.name == 'ed'). \
     #     ...order_by(User.id)
     # query.scalar()
-    #
     # https: // docs.sqlalchemy.org / en / 13 / orm / relationship_api.html  # sqlalchemy.orm.relationship
 
 @project.route('/add',methods=['post'])
@@ -44,6 +58,8 @@ def project_add(*args,**kwargs):
     try:
         pro = Project(project=project,version=version)
         db_session.add(pro)
+        # db_session.rollback()
+        db_session.commit()
         return make_response(jsonify({'code': 200, 'msg': u'添加项目成功!'}))
     except Exception as e:
         print(e)
